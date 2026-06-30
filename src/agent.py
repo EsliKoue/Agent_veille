@@ -45,7 +45,12 @@ def search_web(state):
 def write_report(state):
     print("--- RÉDACTION DU RAPPORT STRATÉGIQUE ---")
     context = "\n".join(state['context'])
+    
+    # DEBUG : Affiche les 200 premiers caractères du contexte dans tes logs GitHub
+    print(f"DEBUG CONTEXT: {context[:200]}")
+    
     prompt = REPORT_WRITER_PROMPT + f"\n\nInformations collectées : {context}"
+    # ...
     
     response = llm.invoke(prompt)
     return {"report": response.content}
