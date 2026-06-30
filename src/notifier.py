@@ -1,38 +1,47 @@
 # src/notifier.py
 import smtplib
-from email.message import EmailMessage
 import os
+import re
+from email.message import EmailMessage
 
 def send_email(report_content):
-    sender = "kouemabea@gmail.com" # Ton email Gmail
+    sender = "kouemabea@gmail.com"  # À remplacer par ton adresse
     recipient = "kouemabea@gmail.com"
-    password = os.getenv("EMAIL_PASSWORD") # Ton mot de passe d'application
+    password = os.getenv("EMAIL_PASSWORD")
 
     msg = EmailMessage()
-    msg['Subject'] = "📊 Veille Stratégique : Fintech & Banque CI"
+    msg['Subject'] = "📊 Veille Stratégique : Marchés Financiers & Économie"
     msg['From'] = sender
     msg['To'] = recipient
 
-    # Conversion du Markdown en HTML propre
-    # Version corrigée (sans backslash dans la f-string)
-    html_content = """
+    # 1. Conversion des liens Markdown [Texte](URL) en <a href="URL">Texte</a>
+    html_body = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2" style="color: #3498db;">\1</a>', report_content)
+    
+    # 2. Conversion des titres de sections (ex: "1. Titre") en <h3>
+    html_body = re.sub(r'(\d\.\s[^\n]+)', r'<h3 style="color: #2c3e50; border-bottom: 1px solid #eee; margin-top: 20px;">\1</h3>', html_body)
+    
+    # 3. Conversion des tirets en listes HTML et nettoyage des retours à la ligne
+    html_body = html_body.replace("- ", "<li>")
+    html_body = html_body.replace("\n", "<br>")
+
+    # Construction du template HTML final
+    html_content = f"""
     <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: auto; padding: 20px;">
-        <div style="background-color: #ffffff; border-left: 5px solid #2c3e50; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <h1 style="color: #2c3e50; margin-top: 0;">Veille Stratégique</h1>
-            <p style="color: #7f8c8d; font-size: 0.9em;">Rapport quotidien - Secteur Fintech & Banque CI</p>
-        </div>
-        <div style="padding: 20px 0;">
-            REPLACE_REPORT_CONTENT
-        </div>
-        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; font-size: 0.8em; color: #95a5a6; text-align: center;">
-            <p>Agent IA Autonome - Veille Sectorielle</p>
+    <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; line-height: 1.6; padding: 20px;">
+        <div style="max-width: 650px; margin: auto; border: 1px solid #e1e1e1; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="background-color: #2c3e50; color: #ffffff; padding: 20px; text-align: center;">
+                <h1 style="margin: 0; font-size: 22px;">Rapport de Veille Financière</h1>
+            </div>
+            <div style="padding: 30px;">
+                {html_body}
+            </div>
+            <div style="background-color: #f8f9f9; padding: 15px; text-align: center; font-size: 12px; color: #7f8c8d;">
+                <p>Agent IA Autonome - Veille Sectorielle Temps Réel</p>
+            </div>
         </div>
     </body>
     </html>
-    """.replace("REPLACE_REPORT_CONTENT", report_content.replace("**", "<b>").replace("\n", "<br>"))
-    
-    msg.add_alternative(html_content, subtype='html')
+    """
     
     msg.add_alternative(html_content, subtype='html')
 
