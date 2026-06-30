@@ -22,7 +22,7 @@ class AgentState(dict):
 # --- NODES ---
 
 def generate_queries(state):
-    print("--- GÉNÉRATION DES REQUÊTES : SECTEUR BANQUE/FINTECH CI ---")
+    print("--- GÉNÉRATION DES REQUÊTES : SECTEUR FINANCER ---")
     response = llm.invoke(QUERY_GENERATOR_PROMPT)
     
     content = response.content.strip()
@@ -31,9 +31,10 @@ def generate_queries(state):
     try:
         queries = json.loads(match.group() if match else content)
     except json.JSONDecodeError:
-        queries = ["innovations paiement mobile Côte d'Ivoire", "actualité bancaire BCEAO", "Fintech Abidjan"]
+        queries = ["actualité économique mondiale 24h", "taux directeurs banques centrales FED BCE", "prix matières premières or pétrole"]
         
-    return {"queries": queries, "company": state.get('company', "Fintech et Banque CI")}
+    # Ligne 30 :
+    return {"queries": queries, "company": state.get('company', "Marchés Financiers Mondiaux")}
 
 def search_web(state):
     print("--- EXÉCUTION DE LA RECHERCHE ---")
