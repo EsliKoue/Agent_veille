@@ -6,7 +6,7 @@ import os
 def send_email(report_content):
     # Remplace par tes informations
     sender = "kouemabea@gmail.com"
-    recipient = "kouemabeal@gmail.com"
+    recipient = "kouemabea@gmail.com"
     password = os.getenv("EMAIL_PASSWORD") # La clé sera sécurisée sur GitHub
 
     msg = EmailMessage()
