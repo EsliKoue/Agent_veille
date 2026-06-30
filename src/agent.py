@@ -8,7 +8,7 @@ from src.prompts import QUERY_GENERATOR_PROMPT, REPORT_WRITER_PROMPT
 
 # Initialisation du modèle Groq
 llm = ChatGroq(
-    groq_api_key="gsk_VOTRE_CLE_GROQ_ICI", # Remplace par ta clé réelle
+    groq_api_key="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", # Remplace par ta clé réelle
     model_name="llama-3.3-70b-versatile"
 )
 
