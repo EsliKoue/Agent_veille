@@ -14,22 +14,25 @@ def send_email(report_content):
     msg['To'] = recipient
 
     # Conversion du Markdown en HTML propre
-    html_content = f"""
+    # Version corrigée (sans backslash dans la f-string)
+    html_content = """
     <html>
-    <body style="font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: auto; padding: 20px;">
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: auto; padding: 20px;">
         <div style="background-color: #ffffff; border-left: 5px solid #2c3e50; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
             <h1 style="color: #2c3e50; margin-top: 0;">Veille Stratégique</h1>
             <p style="color: #7f8c8d; font-size: 0.9em;">Rapport quotidien - Secteur Fintech & Banque CI</p>
         </div>
         <div style="padding: 20px 0;">
-            {report_content.replace('**', '<b>').replace('\n', '<br>')}
+            REPLACE_REPORT_CONTENT
         </div>
         <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; font-size: 0.8em; color: #95a5a6; text-align: center;">
             <p>Agent IA Autonome - Veille Sectorielle</p>
         </div>
     </body>
     </html>
-    """
+    """.replace("REPLACE_REPORT_CONTENT", report_content.replace("**", "<b>").replace("\n", "<br>"))
+    
+    msg.add_alternative(html_content, subtype='html')
     
     msg.add_alternative(html_content, subtype='html')
 
